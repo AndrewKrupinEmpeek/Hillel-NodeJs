@@ -1,15 +1,12 @@
-const { add } = require('./lib/add');
-const { multiply } = require('./lib/multiply');
-require('./lib/divide');
-require('./lib/patch');
+require('dotenv').config();
 
-const A = 10;
-const B = 2;
+const { listProcessEnvVariables } = require('./lib/processEnvVariablesHandler');
+const { listProcessArgvVariables } = require('./lib/processArgvVariablesHandler');
+require('./lib/colorPatch');
+require('./lib/shortPatch');
 
-const result1 = add(A, B);
-const result2 = multiply(A, B);
-const result3 = divide(A, B);
+listProcessEnvVariables();
 
-console.log('add', result1);
-console.log('multiply', result2);
-console.log('divide', result3);
+listProcessArgvVariables();
+
+console.short("Hello", 42, "world!");
