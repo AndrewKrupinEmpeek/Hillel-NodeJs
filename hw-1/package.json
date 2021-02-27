@@ -1,0 +1,25 @@
+{
+  "name": "ad-node-js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "cross-env node app.js",
+    "start:cpu:ram": "cross-env node app.js --cpu --ram",
+    "start:lan": "cross-env node app.js --lan",
+    "start:fullInfo": "cross-env node app.js --full-info",
+    "start:debug": "cross-env node --inspect-brk app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "dotenv": "^8.2.0",
+    "yargs": "^16.2.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "prettier": "^2.2.1"
+  }
+}
