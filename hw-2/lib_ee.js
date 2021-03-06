@@ -1,58 +1,59 @@
-const { readdir } = require("fs/promises");
-const { join } = require('path');
-const EventEmitter = require("events");
+const os = require('os');
+const { readdir } = require('fs/promises');
+const { join, sep, resolve } = require('path');
+const EventEmitter = require('events');
 
 const FoundFile = require('./FoundFile');
 
 class Finder extends EventEmitter {
   dirs = 0;
-  baseDirToSearch;
+  fileName;
+  searchDepth;
+  path;
 
-  constructor() {
+  constructor({ path = os.homedir(), searchDepth = 0, fileName = '*.*' }) {
     super();
 
-    this.on("start", (dirToSearch, fileName) => {
-      this.baseDirToSearch = dirToSearch;
-      this.recParseDir(dirToSearch, fileName)
+    this.path = path;
+    this.searchDepth = searchDepth;
+    this.fileName = fileName;
+
+    this.on('init', () => {
+      this.parse(this.path, this.fileName)
         .then(result => {
           process.nextTick(() => {
-            this.emit("complete", {
+            this.emit('complete', {
               scanned: { files: result.length, dirs: this.dirs },
               found: result,
             });
           });
         })
-        .catch(error => this.emit("complete", error));
-
+        .catch(error => this.emit('error', error));
     });
 
-    setTimeout(() => this.emit("started"), 0);
+    setTimeout(() => this.emit('started'), 0);
   }
 
-  async recParseDir(dirToSearch, fileName, result = []) {
+  async parse(dirToSearch, fileName, result = []) {
     const files = await readdir(dirToSearch, { withFileTypes: true });
 
     for (let file of files) {
       const fullPath = join(dirToSearch, file.name);
 
-      if (file.isDirectory()) {
+      if (file.isDirectory() && dirToSearch.split(sep).length <= this.searchDepth) {
         this.dirs++;
-        await this.recParseDir(fullPath, fileName, result);
+        await this.parse(fullPath, fileName, result);
       }
       else if (file.name.match(fileName)) {
-        const foundFile = new FoundFile(file.name, this.getRelativePath(fullPath));
+        const foundFile = new FoundFile(file.name, resolve(fullPath));
 
-        process.nextTick(() => this.emit("find", foundFile));
+        process.nextTick(() => this.emit('find', foundFile));
 
         result.push(foundFile);
       }
     }
 
     return result;
-  }
-
-  getRelativePath(absPath) {
-    return absPath.split(this.baseDirToSearch)[1];
   }
 }
 
