@@ -1,19 +1,11 @@
-const fs = require('fs');
+const { readdir } = require("fs/promises");
 const { join } = require('path');
-
 const EventEmitter = require("events");
 
-class FoundFile {
-  constructor( name, path ) {
-    this.name = name;
-    this.path = path;
-  }
-}
+const FoundFile = require('./FoundFile');
 
-class FindLib extends EventEmitter {
+class Finder extends EventEmitter {
   dirs = 0;
-  files;
-  result;
   baseDirToSearch;
 
   constructor() {
@@ -21,51 +13,42 @@ class FindLib extends EventEmitter {
 
     this.on("start", (dirToSearch, fileName) => {
       this.baseDirToSearch = dirToSearch;
-      this.recParseDir(dirToSearch, fileName);
+      this.recParseDir(dirToSearch, fileName)
+        .then(result => {
+          process.nextTick(() => {
+            this.emit("complete", {
+              scanned: { files: result.length, dirs: this.dirs },
+              found: result,
+            });
+          });
+        })
+        .catch(error => this.emit("complete", error));
 
-      process.nextTick(() => {
-        this.emit("complete", {
-          scanned: { files: this.result.length, dirs: this.dirs },
-          found: this.result,
-        });
-      });
     });
 
-    setTimeout(() => {
-      this.emit("started");
-    }, 0);
+    setTimeout(() => this.emit("started"), 0);
   }
 
-  recParseDir(dirToSearch, fileName, readFiles, interimResult) {
-    this.files = readFiles || fs.readdirSync(dirToSearch, { withFileTypes: true });
-    this.result = interimResult || [];
+  async recParseDir(dirToSearch, fileName, result = []) {
+    const files = await readdir(dirToSearch, { withFileTypes: true });
 
-    this.files.forEach(file => {
-
-      const modifiedPath = join(dirToSearch, file.name);
+    for (let file of files) {
+      const fullPath = join(dirToSearch, file.name);
 
       if (file.isDirectory()) {
         this.dirs++;
-        this.result = this.recParseDir(
-          modifiedPath,
-          fileName,
-          fs.readdirSync(modifiedPath, { withFileTypes: true }),
-          this.result
-        );
-      } else {
-        if (file.name.match(fileName)) {
-          const foundFile = new FoundFile(file.name, this.getRelativePath(modifiedPath));
-
-          process.nextTick(() => {
-            this.emit("find", foundFile);
-          });
-
-          this.result.push(foundFile);
-        }
+        await this.recParseDir(fullPath, fileName, result);
       }
-    });
+      else if (file.name.match(fileName)) {
+        const foundFile = new FoundFile(file.name, this.getRelativePath(fullPath));
 
-    return this.result;
+        process.nextTick(() => this.emit("find", foundFile));
+
+        result.push(foundFile);
+      }
+    }
+
+    return result;
   }
 
   getRelativePath(absPath) {
@@ -73,4 +56,4 @@ class FindLib extends EventEmitter {
   }
 }
 
-module.exports = FindLib;
+module.exports = Finder;
