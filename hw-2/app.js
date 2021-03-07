@@ -1,27 +1,25 @@
-const Finder = require('./lib_ee');
+const Finder = require('./Finder');
+const { EVENT_INIT, EVENT_COMPLETE, EVENT_ERROR, EVENT_FIND, EVENT_PROGRESS } = require('./constants');
 
-const MyEE = new Finder({
-  path: './',
-  searchDepth: 1,
+const finder = new Finder({
+  path: __dirname,
+  searchDepth: 0,
   fileName: 'app.js'
 });
 
-MyEE.on('started', () => {
-  console.log('Parse started');
+finder.on(EVENT_INIT, () => {
+  finder.parse();
 });
 
-MyEE.emit('init');
-
-MyEE.on('find', ({ name, path }) => {
+finder.on(EVENT_FIND, ({ name, path }) => {
   console.log(`File ${name} found in path: ${path}`);
 });
 
-// progress эмитится каждые 3 секунд, если не было события find
-MyEE.on('progress', ({files, dir}) => {
-  console.log(`Progress: ${files} files, ${dir} dir`);
+finder.on(EVENT_PROGRESS, ({files, directories}) => {
+  console.log(`Progress: ${files} files, ${directories} dir`);
 });
 
-MyEE.once('complete', ({ scanned: { files, dirs }, found }) => {
+finder.once(EVENT_COMPLETE, ({ scanned: { files, dirs }, found }) => {
   console.log(
     'complete',
     `${files} files`,
@@ -30,7 +28,7 @@ MyEE.once('complete', ({ scanned: { files, dirs }, found }) => {
   );
 });
 
-MyEE.once('error', (err) => {
+finder.once(EVENT_ERROR, (err) => {
   console.error('aAAAAAAAAAAAAAAAAAA');
   console.error(err);
   process.exit(1);
