@@ -1,9 +1,12 @@
+require('dotenv').config();
+
+require('./colorPatch');
 const Finder = require('./Finder');
 const { EVENT_INIT, EVENT_COMPLETE, EVENT_ERROR, EVENT_FIND, EVENT_PROGRESS } = require('./constants');
 
 const finder = new Finder({
   path: __dirname,
-  searchDepth: 0,
+  searchDepth: 2,
   fileName: 'app.js'
 });
 
