@@ -1,5 +1,4 @@
 const chalk = require('chalk');
-const util = require('util')
 
 const COLOR = process.env.COLOR;
 
@@ -13,5 +12,5 @@ try {
 const log = console.log;
 
 global.console.log = (...args) => {
-  log(chalk[COLOR](util.inspect(args, {colors:true, depth:null})));
+  log(chalk[COLOR](...args));
 };

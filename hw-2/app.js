@@ -26,8 +26,8 @@ finder.once(EVENT_COMPLETE, ({ scanned: { files, dirs }, found }) => {
   console.log(
     'complete',
     `${files} files`,
-    `${dirs} dirs`,
-    found
+    `${dirs} dirs: \n ============= \n`,
+    ...found.map(x => `name: ${x.name}; \n path: ${x.path} \n ============= \n`)
   );
 });
 
