@@ -1,0 +1,37 @@
+-Parse started
+File app.js found in path: D:\Ad\NodeJS\Hillel-Node\hw-3\app.js
+File app.js found in path: D:\Ad\NodeJS\Hillel-Node\hw-3\level 2\app.js
+Yeeee, we found it!
+
+          Path: D:\Ad\NodeJS\Hillel-Node\hw-3\app.js
+
+          On line 3:
+
+          Search Text: ').config();
+
+const { create
+
+
+          ======================
+
+File app.ts found in path: D:\Ad\NodeJS\Hillel-Node\hw-3\level 2\app.ts
+
+
+
+complete
+
+    3 files
+
+    88 dirs: 
+ ============= 
+name: app.js;
+path: D:\Ad\NodeJS\Hillel-Node\hw-3\app.js 
+ ============= 
+
+name: app.js;
+path: D:\Ad\NodeJS\Hillel-Node\hw-3\level 2\app.js 
+ ============= 
+
+name: app.ts;
+path: D:\Ad\NodeJS\Hillel-Node\hw-3\level 2\app.ts 
+ ============= 

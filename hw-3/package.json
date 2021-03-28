@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env node app.js --ext=js",
-    "start:debug": "cross-env node --inspect-brk app.js --ext=js"
+    "start": "cross-env node app.js --ext=js,png,ts --search=const",
+    "start:debug": "cross-env node --inspect-brk app.js --ext=js,png,ts --search=const"
   },
   "keywords": [],
   "author": "",

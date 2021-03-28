@@ -1,12 +1,13 @@
 const os = require('os');
 const EventEmitter = require('events');
 const FileType = require('file-type');
-const { createReadStream } = require("fs");
+const { createReadStream } = require('fs');
 const { readdir, appendFile } = require('fs/promises');
 const { join, resolve, sep, relative } = require('path');
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 
+const { logToFile } = require('./log-utils');
 const FoundFile = require('./FoundFile');
 const Progress = require('./Progress');
 const { EVENT_INIT, EVENT_PARSE_STARTED, EVENT_COMPLETE, EVENT_ERROR, EVENT_FIND, EVENT_PROGRESS, TIMER } = require('./constants');
@@ -30,8 +31,10 @@ class Finder extends EventEmitter {
 
     setTimeout(() => this.emit(EVENT_INIT), 0);
 
-    this.once(EVENT_PARSE_STARTED, () => {
-      console.log('Parse started');
+    this.once(EVENT_PARSE_STARTED, async () => {
+      const txt = 'Parse started\n';
+      console.log(txt);
+      await logToFile(txt);
       this.startTimer();
     });
 
@@ -48,7 +51,7 @@ class Finder extends EventEmitter {
       this.emit(EVENT_PARSE_STARTED);
 
       const result = await this.readDirectory(this._basePath, this._fileName);
-  
+
       this.emit(EVENT_COMPLETE, {
         scanned: { files: result.length, dirs: this._checkedDirectories },
         found: result,
@@ -72,10 +75,13 @@ class Finder extends EventEmitter {
       }
       else if (item.isFile()) {
         this._checkedFiles++;
+        const fullFilePath = resolve(newDirectory);
 
         if (this.isNameMatched(item, fileName)) {
-          const fullFilePath = resolve(newDirectory);
-          await this.testStream(fullFilePath);
+          if (argv.search && await this.isTxtFile(fullFilePath)) {
+            this.searchTxt(fullFilePath);
+          }
+
           const foundFile = new FoundFile(item.name, fullFilePath);
           
           this.emit(EVENT_FIND, foundFile);
@@ -88,33 +94,59 @@ class Finder extends EventEmitter {
     return result;
   }
 
-  async testStream(filePath) {
-    const currentDateArray = new Date().toISOString().split('T');
-    const logFileName = `${currentDateArray[0]}_${currentDateArray[1].split('.')[0].split(':').join('-')}`;
-    await appendFile(`./log/${logFileName}.txt`, 'data to append', function (err) {
-      if (err) throw err;
+  searchTxt(filePath) {
+    const rs = createReadStream(filePath, {
+      encoding: 'utf-8',
+      highWaterMark: argv.search.length < 5
+        ? 5
+        : argv.search.length + 10,
     });
 
-    const rs = createReadStream(join(__dirname, 'app.js'));
-    // const rs = createReadStream(filePath);
-    console.log('filePath');
-    console.log(filePath);
-    console.log(rs);
+    let chunks = '';
+    let result = '';
+    let lineNumber = 1;
 
-    rs.on("readable", async () => {
-      const chunk = rs.read(4100);
-      console.log('chunk');
-      console.log(chunk);
-      if (!chunk) return;
-      const type = await FileType.fromBuffer(chunk);
-      console.log('type');
-      console.log(type);
-      rs.destroy();
+    rs.on('data', async chunk => {
+      let newBreaks;
+      const prevBreaks = chunks.match(/\n/g)?.length;
+      chunks += chunk;
+
+      if (chunks.match(argv.search)) {
+        const searchIndex = chunks.indexOf(argv.search);
+        newBreaks = chunks.slice(0, searchIndex).match(/\n/g)?.length;
+  
+        if (newBreaks) {
+          lineNumber += newBreaks - (prevBreaks ?? 0);
+        }
+
+        result += `Yeeee, we found it!\n
+          Path: ${filePath}\n
+          On line ${lineNumber}:\n
+          Search Text: ${chunks}\n\n
+          ======================\n\n`;
+        console.log(result);
+        await logToFile(result);
+        rs.destroy();
+      } else {
+        newBreaks = chunks.match(/\n/g)?.length;
+  
+        if (newBreaks) {
+          lineNumber += newBreaks - (prevBreaks ?? 0);
+        }
+      }
+
+      chunks = chunk;
     });
   }
 
+  async isTxtFile(filePath) {
+    const rs = createReadStream(filePath);
+    const fileType = await FileType.fromStream(rs);
+    return !fileType;
+  }
+
   isNameMatched(file, searchName) {
-    return argv.ext.split(',').some(x => file.name.match(`${searchName}.${x}`));
+    return argv.ext?.split(',').some(x => file.name.match(`${searchName}.${x}`));
   }
 
   startTimer() {
