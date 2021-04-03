@@ -1,0 +1,82 @@
+body {
+  background: #ccc;
+}
+
+.ttl {
+  text-align: center;
+}
+
+.message {
+  border-bottom: 1px solid #000;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  width: 300px;
+}
+
+.message .submit,
+.message .cancel,
+.message .txt-input {
+  display: none;
+}
+
+.message.edit .submit,
+.message.edit .cancel,
+.message.edit .txt-input {
+  display: block;
+}
+
+.message.edit .edit,
+.message.edit .delete,
+.message.edit .txt {
+  display: none;
+}
+
+.message-content {
+  margin-bottom: 10px;
+}
+
+.message-top {
+  color: rgb(110, 110, 110);
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.actions {
+  display: flex;
+}
+
+.action {
+  margin-right: 10px;
+}
+
+.add-block {
+  margin-top: 50px;
+}
+
+.add-block .form {
+  display: none;
+}
+
+.add-block.edit .form {
+  display: flex;
+}
+
+.add-block.edit .add {
+  display: none;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+}
+
+.form .txt-input {
+  margin-bottom: 10px;
+}
+
+.form .btn {
+  margin-right: 10px;
+}
