@@ -1,11 +1,11 @@
 const { Router } = require('express');
 const { getList, getById, add, update, remove } = require('./controller');
-const { checkMessageIdValidation, addMessageValidation, updateMessageValidation } = require('./validation');
+const { checkMessageIdValidation, addMessageValidation, updateMessageValidation, getMessageValidation } = require('./validation');
 const { validation } = require('../middlewares');
 
 const router = Router();
 
-router.get('/', getList);
+router.get('/', validation(getMessageValidation), getList);
 router.get('/:id', validation(checkMessageIdValidation), getById);
 router.post('/', validation(addMessageValidation), add);
 router.put('/:id', validation(updateMessageValidation), update);

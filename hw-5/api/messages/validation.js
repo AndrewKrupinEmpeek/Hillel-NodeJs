@@ -24,3 +24,11 @@ exports.updateMessageValidation = {
     Text: Joi.string().min(1).required(),
   }),
 };
+
+exports.getMessageValidation = {
+  [Segments.QUERY]: Joi.object().keys({
+    sort: Joi.string(),
+    limit: Joi.number().positive().integer().max(51),
+    skip: Joi.number().positive().integer().max(501),
+  }),
+};

@@ -18,7 +18,7 @@ const limitMessages = (limit, messages) => messages.slice(0, limit);
 const skipMessages = (skip, messages) => messages.slice(skip);
 
 exports.getList = async (req, res, next) => {
-  const { sort, limit, skip } = req.query;
+  const { sort = 'AddedAt', limit = 10, skip = 0 } = req.query;
 
   if (sort && !isNaN(sort) || limit && isNaN(limit) || skip && isNaN(skip)) {
     return next({
