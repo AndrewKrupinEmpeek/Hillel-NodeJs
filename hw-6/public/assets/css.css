@@ -80,3 +80,11 @@ body {
 .form .btn {
   margin-right: 10px;
 }
+
+.container {
+  display: flex;
+}
+
+.part {
+  flex: 1 1 50%;
+}

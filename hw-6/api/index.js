@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const { isCelebrateError } = require('celebrate');
 
+const authModule = require('./auth');
 const messagesModule = require('./messages');
 const {
   codeConstants: { NOT_ACCEPTABLE, BAD_REQUEST },
@@ -8,6 +9,7 @@ const {
 
 const router = Router();
 
+router.use('/auth', authModule);
 router.use('/messages', messagesModule);
 
 router.use((err, _, res, next) => {

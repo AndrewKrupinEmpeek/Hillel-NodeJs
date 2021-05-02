@@ -1,6 +1,6 @@
 const { appendFile, appendFileSync } = require('fs');
 
-const { TIMER } = require('./constants');
+const { TIMER } = require('../constants');
 
 let _logFileName;
 let _continuousLogFileName;

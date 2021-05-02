@@ -9,8 +9,7 @@ const checkMessageIdValidation = {
 
 const addMessageValidation = {
   [Segments.BODY]: Joi.object().keys({
-    Sender: Joi.string().min(1).required(),
-    Text: Joi.string().min(1).required(),
+    Text: Joi.string().min(3).max(255).required(),
   }),
 };
 

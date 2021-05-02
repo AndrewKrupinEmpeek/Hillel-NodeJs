@@ -4,6 +4,7 @@ module.exports = {
     BAD_REQUEST: 400,
     NOT_FOUND: 404,
     NOT_ACCEPTABLE: 406,
+    UNAUTHORIZED: 401,
   },
   pathConstants: {
     ASSETS: '/assets',
@@ -17,6 +18,10 @@ module.exports = {
     POST: 'POST',
     PUT: 'PUT',
     DELETE: 'DELETE',
+  },
+  cookies: {
+    USER: 'user',
+    USER_EXPIRATION: 300000,
   },
   PORT: process.env.PORT || '8000',
   TIMER: 10000,

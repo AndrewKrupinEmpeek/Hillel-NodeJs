@@ -1,17 +1,23 @@
+require('dotenv').config();
+
 const express = require('express');
 const nunjucks = require('nunjucks');
 const { join } = require('path');
 const dateFilter = require('nunjucks-date-filter');
+const cookieParser = require('cookie-parser');
 
 const {
   pathConstants: { ASSETS, HOME, API },
   PORT,
 } = require('./constants');
-const { log, initContinuousLog, stopContinuousLog } = require('./log-utils');
+const { log, initContinuousLog, stopContinuousLog } = require('./utils/log-utils');
+const { generateSecret } = require('./utils/generateSecret');
 const api = require('./api');
+const { getMessages } = require('./api/messages/controller');
 
 const server = express();
 server.locals = {
+  authorized: false,
   messages: [
     {
       Id: 1,
@@ -48,7 +54,12 @@ let env = nunjucks.configure(join(__dirname, 'public', 'views'), {
 });
 env.addFilter('date', dateFilter);
 
+const secret = process.env.COOKIE_SECRET || generateSecret(40);
+console.log('secret');
+console.log(secret);
+
 server.use(express.json());
+server.use(cookieParser(secret));
 
 server.use(log);
 
@@ -56,11 +67,12 @@ server.use(API, api);
 
 server.use(ASSETS, express.static(join(__dirname, 'public', 'assets')));
 
-server.use(HOME, async (_, res) => {
+server.use(HOME, async (req, res) => {
   res.render(
     'index.nunjucks',
     {
-      messages: res.app.locals.messages
+      messages: getMessages(req),
+      authorized: req.signedCookies.user,
     }
   );
 });

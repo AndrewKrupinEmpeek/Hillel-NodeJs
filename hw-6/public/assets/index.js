@@ -1,10 +1,70 @@
 (async function() {
   const $list = document.getElementById('list');
-  const $add = document.getElementById('add');
-  const $cancel = document.getElementById('cancel');
-  const $form = document.getElementById('form');
+  const $rightPart = document.getElementById('right-part');
+  const $leftPart = document.getElementById('left-part');
   const $addBlock = document.getElementById('add-block');
   let messages = messageList || [];
+
+  $leftPart.addEventListener('keypress', async (e) => {
+    if (e.key === 'Enter' && e.target.id === 'add-input') {
+      e.stopPropagation();
+      e.preventDefault();
+
+      try {
+        await addessage(document.getElementById('form'));
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  });
+
+  $leftPart.addEventListener('click', async (e) => {
+    if (e.target.id === 'add') {
+      document.getElementById('add-block').classList.add('edit');
+    }
+    else if (e.target.id === 'cancel') {
+      document.getElementById('add-block').classList.remove('edit');
+    }
+    else if (e.target.id === 'add-submit') {
+      e.preventDefault();
+  
+      try {
+        await addessage(document.getElementById('form'));
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  });
+
+  $rightPart.addEventListener('keypress', async (e) => {
+    if (e.key === 'Enter' && e.target.id === 'login-input') {
+      e.stopPropagation();
+      e.preventDefault();
+
+      try {
+        await login(document.getElementById('form-login'));
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  });
+
+  $rightPart.addEventListener('click', async (e) => {
+    if (e.target.id === 'logout') {
+      try {
+        await logout();
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    else if (e.target.id === 'login') {
+      try {
+        await login(document.getElementById('form-login'));
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  });
 
   $list.addEventListener('click', (e) => {
     if (e.target.classList.contains('edit')) {
@@ -21,51 +81,80 @@
     }
   });
 
-  $cancel.addEventListener('click', (e) => {
-    $addBlock.classList.remove('edit');
-  });
+  async function logout() {
+    try {
+      await sendRequest({
+        url: 'http://localhost:8000/api/auth/logout',
+        method: 'GET',
+        callback: response => {
+          console.log(response);
+          location.reload();
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
-  $add.addEventListener('click', (e) => {
-    $addBlock.classList.add('edit');
-  });
+  async function login(form) {
+    const { username: { value: username } } = form.elements;
 
-  $form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    await addessage(e.target);
-  });
+    try {
+      await sendRequest({
+        url: 'http://localhost:8000/api/auth/login',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username }),
+        callback: response => {
+          console.log(response);
+          location.reload();
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   async function addessage(form) {
-    const { Sender: { value: Sender }, Text: { value: Text } } = form.elements;
+    const { Text: { value: Text } } = form.elements;
 
-    await sendRequest({
-      url: 'http://localhost:8000/api/messages',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        Sender,
-        Text
-      }),
-      callback: response => {
-        console.log(response);
-        messages.push(response);
-        buildList();
-        $addBlock.classList.remove('edit');
-      }
-    });
+    try {
+      await sendRequest({
+        url: 'http://localhost:8000/api/messages',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ Text }),
+        callback: response => {
+          messages.push(response);
+          buildList();
+          $addBlock.classList.remove('edit');
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+
   }
 
   async function deleteMessage(elem) {
     const id = elem.closest('.message').dataset.id;
-    await sendRequest({
-      url: `http://localhost:8000/api/messages/${id}`,
-      method: 'DELETE',
-      callback: response => {
-        messages = messages.filter(x => x.Id !== response);
-        buildList();
-      }
-    });
+
+    try {
+      await sendRequest({
+        url: `http://localhost:8000/api/messages/${id}`,
+        method: 'DELETE',
+        callback: response => {
+          messages = messages.filter(x => x.Id !== response);
+          buildList();
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async function editMessage(elem) {
@@ -73,19 +162,24 @@
     const id = parent.dataset.id;
     const Text = parent.querySelector('.txt-input').value;
 
-    await sendRequest({
-      url: `http://localhost:8000/api/messages/${id}`,
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ Text }),
-      callback: response => {
-        message = messages.find(x => x.Id === response.Id);
-        Object.assign(message, response);
-        buildList();
-      }
-    });
+    try {
+      await sendRequest({
+        url: `http://localhost:8000/api/messages/${id}`,
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ Text }),
+        callback: response => {
+          message = messages.find(x => x.Id === response.Id);
+          Object.assign(message, response);
+          buildList();
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+
   }
 
   async function sendRequest({url, method = 'GET', callback, ...props}) {

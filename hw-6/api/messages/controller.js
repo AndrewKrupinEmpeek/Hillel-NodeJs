@@ -17,6 +17,16 @@ const limitMessages = (limit, messages) => messages.slice(0, limit);
 
 const skipMessages = (skip, messages) => messages.slice(skip);
 
+const getMessages = (req) => {
+  const { user } = req.signedCookies;
+
+  return user
+    ? req.app.locals.messages.filter(x => x.Sender === user)
+    : req.app.locals.messages.slice();
+};
+
+exports.getMessages = getMessages;
+
 exports.getList = async (req, res, next) => {
   const { sort = 'AddedAt', limit = 10, skip = 0 } = req.query;
 
@@ -27,7 +37,7 @@ exports.getList = async (req, res, next) => {
     });
   }
 
-  let _messages = req.app.locals.messages.slice();
+  let _messages = getMessages(req);
 
   if (sort) {
     _messages = sortMessages(sort, _messages);
@@ -46,7 +56,7 @@ exports.getList = async (req, res, next) => {
 
 exports.getById = async (req, res, next) => {
   const { id } = req.params;
-  const message = req.app.locals.messages.find(x => x.Id === id);
+  const message = getMessages(req).find(x => x.Id === id);
 
   if (!message) {
     return next({
@@ -58,10 +68,20 @@ exports.getById = async (req, res, next) => {
   res.json(message);
 };
 
-exports.add = async (req, res) => {
+exports.add = async (req, res, next) => {
+  const { user } = req.signedCookies;
+  if (!user) {
+    next({
+      code: UNAUTHORIZED,
+      message: 'Unauthorized'
+    });
+    return;
+  }
+
   const body = {...req.body};
   body.Id = req.app.locals.messages.length + 1;
   body.AddedAt = new Date();
+  body.Sender = user;
   // res.destroy(); // for test
 
   req.app.locals.messages.push(body);
