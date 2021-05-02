@@ -20,7 +20,7 @@ exports.addMessageValidation = addMessageValidation;
 exports.updateMessageValidation = {
   ...checkMessageIdValidation,
   [Segments.BODY]: Joi.object().keys({
-    Text: Joi.string().min(1).required(),
+    Text: Joi.string().min(3).max(255).required(),
   }),
 };
 
