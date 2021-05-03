@@ -1,0 +1,266 @@
+
+FINISHED
+Status 200
+Pathname: 
+Start Time 1620075004548 ms
+End Time 1620075004548 ms
+Time spend 36 ms
+
+FINISHED
+Status 200
+Pathname: /assets
+Start Time 1620075004642 ms
+End Time 1620075004642 ms
+Time spend 12 ms
+
+FINISHED
+Status 200
+Pathname: /assets
+Start Time 1620075004639 ms
+End Time 1620075004639 ms
+Time spend 17 ms
+
+FINISHED
+Status 200
+Pathname: 
+Start Time 1620075004746 ms
+End Time 1620075004746 ms
+Time spend 1 ms
+
+FINISHED
+Status 304
+Pathname: /assets
+Start Time 1620075007494 ms
+End Time 1620075007494 ms
+Time spend 1 ms
+
+FINISHED
+Status 200
+Pathname: /api/auth
+Start Time 1620075026053 ms
+End Time 1620075026053 ms
+Time spend 7 ms
+
+FINISHED
+Status 200
+Pathname: 
+Start Time 1620075026081 ms
+End Time 1620075026081 ms
+Time spend 2 ms
+
+FINISHED
+Status 304
+Pathname: /assets
+Start Time 1620075026112 ms
+End Time 1620075026112 ms
+Time spend 1 ms
+
+FINISHED
+Status 304
+Pathname: /assets
+Start Time 1620075026112 ms
+End Time 1620075026112 ms
+Time spend 2 ms
+
+FINISHED
+Status 200
+Pathname: 
+Start Time 1620075026163 ms
+End Time 1620075026163 ms
+Time spend 1 ms
+
+FINISHED
+Status 200
+Pathname: /api/messages
+Start Time 1620075033184 ms
+End Time 1620075033184 ms
+Time spend 1 ms
+
+FINISHED
+Status 200
+Pathname: /api/auth
+Start Time 1620075034675 ms
+End Time 1620075034675 ms
+Time spend 0 ms
+
+FINISHED
+Status 200
+Pathname: 
+Start Time 1620075034695 ms
+End Time 1620075034695 ms
+Time spend 2 ms
+
+FINISHED
+Status 304
+Pathname: /assets
+Start Time 1620075034724 ms
+End Time 1620075034724 ms
+Time spend 1 ms
+
+FINISHED
+Status 304
+Pathname: /assets
+Start Time 1620075034724 ms
+End Time 1620075034724 ms
+Time spend 1 ms
+
+FINISHED
+Status 200
+Pathname: 
+Start Time 1620075034772 ms
+End Time 1620075034772 ms
+Time spend 1 ms
+
+FINISHED
+Status 200
+Pathname: /api/auth
+Start Time 1620075040728 ms
+End Time 1620075040728 ms
+Time spend 1 ms
+
+FINISHED
+Status 200
+Pathname: 
+Start Time 1620075040748 ms
+End Time 1620075040748 ms
+Time spend 1 ms
+
+FINISHED
+Status 304
+Pathname: /assets
+Start Time 1620075040777 ms
+End Time 1620075040777 ms
+Time spend 1 ms
+
+FINISHED
+Status 304
+Pathname: /assets
+Start Time 1620075040778 ms
+End Time 1620075040778 ms
+Time spend 1 ms
+
+FINISHED
+Status 200
+Pathname: 
+Start Time 1620075040827 ms
+End Time 1620075040827 ms
+Time spend 1 ms
+
+FINISHED
+Status 200
+Pathname: /api/messages
+Start Time 1620075046435 ms
+End Time 1620075046435 ms
+Time spend 1 ms
+
+FINISHED
+Status 304
+Pathname: /api/auth
+Start Time 1620075049004 ms
+End Time 1620075049004 ms
+Time spend 1 ms
+
+FINISHED
+Status 200
+Pathname: 
+Start Time 1620075049023 ms
+End Time 1620075049023 ms
+Time spend 1 ms
+
+FINISHED
+Status 304
+Pathname: /assets
+Start Time 1620075049051 ms
+End Time 1620075049051 ms
+Time spend 1 ms
+
+FINISHED
+Status 304
+Pathname: /assets
+Start Time 1620075049052 ms
+End Time 1620075049052 ms
+Time spend 2 ms
+
+FINISHED
+Status 200
+Pathname: 
+Start Time 1620075049101 ms
+End Time 1620075049101 ms
+Time spend 2 ms
+
+FINISHED
+Status 200
+Pathname: /api/auth
+Start Time 1620075057732 ms
+End Time 1620075057732 ms
+Time spend 1 ms
+
+FINISHED
+Status 200
+Pathname: 
+Start Time 1620075057750 ms
+End Time 1620075057750 ms
+Time spend 1 ms
+
+FINISHED
+Status 304
+Pathname: /assets
+Start Time 1620075057782 ms
+End Time 1620075057782 ms
+Time spend 1 ms
+
+FINISHED
+Status 304
+Pathname: /assets
+Start Time 1620075057783 ms
+End Time 1620075057783 ms
+Time spend 1 ms
+
+FINISHED
+Status 200
+Pathname: 
+Start Time 1620075057831 ms
+End Time 1620075057831 ms
+Time spend 1 ms
+
+FINISHED
+Status 200
+Pathname: /api/messages
+Start Time 1620075059871 ms
+End Time 1620075059871 ms
+Time spend 0 ms
+
+FINISHED
+Status 304
+Pathname: /api/auth
+Start Time 1620075061263 ms
+End Time 1620075061263 ms
+Time spend 1 ms
+
+FINISHED
+Status 200
+Pathname: 
+Start Time 1620075061279 ms
+End Time 1620075061279 ms
+Time spend 1 ms
+
+FINISHED
+Status 304
+Pathname: /assets
+Start Time 1620075061308 ms
+End Time 1620075061308 ms
+Time spend 1 ms
+
+FINISHED
+Status 304
+Pathname: /assets
+Start Time 1620075061310 ms
+End Time 1620075061310 ms
+Time spend 1 ms
+
+FINISHED
+Status 200
+Pathname: 
+Start Time 1620075061360 ms
+End Time 1620075061360 ms
+Time spend 0 ms

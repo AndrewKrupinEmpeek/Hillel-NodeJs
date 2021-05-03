@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="/assets/css.css">
+</head>
+<body>
+  <h1 class="ttl">NUNJ</h1>
+
+  <div class="container">
+    <div class="part left" id="left-part">
+      <ul class="list" id="list">
+        {% for item in messages %}
+          <li class="message" data-id="{{item.Id}}">
+            <div class="message-content">
+              <div class="message-top">
+                <div class="author">Author: {{item.Sender}}</div>
+                <div class="date">{{ item.AddedAt | date("YYYY-MM-DD") }}</div>
+              </div>
+              <input class="txt-input" type="text" name="text">
+              <div class="txt">{{item.Text}}</div>
+            </div>
+            {% if authorized %}
+              <div class="actions">
+                <button class="action edit">edit</button>
+                <button class="action delete">delete</button>
+                <button class="action cancel">cancel</button>
+                <button class="action submit">submit</button>
+              </div>
+           {% endif %}
+          </li>
+        {% else %}
+          <li>There are no messages !</li>
+        {% endfor %}
+      </ul>
+
+      {% if authorized %}
+        <div class="add-block" id="add-block">
+          <button class="btn add" id="add">+ add</button>
+          <form class="form" id="form">
+            <input class="txt-input" id="add-input" type="text" name="Text" placeholder="text">
+            <div class="form-actions">
+              <button class="btn" id="add-submit" type="submit">Submit</button>
+              <button class="btn cancel" id="cancel" type="button">Cancel</button>
+            </div>
+          </form>
+        </div>
+      {% endif %}
+    </div>
+    <div class="part right" id="right-part">
+      {% if authorized %}
+        <button class="btn cancel" id="logout" type="button">Logout</button>
+      {% else %}
+        <form class="form" id="form-login">
+          <input class="txt-input" id="login-input" type="text" name="username" placeholder="User">
+          <div class="form-actions">
+            <button class="btn" type="button" id="login">Login</button>
+          </div>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+
+  <script>
+    var messageList = {{ messages | dump | safe }};
+  </script>
+
+  <script src="/assets/index.js"></script>
+</body>
+</html>
