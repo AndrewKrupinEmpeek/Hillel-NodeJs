@@ -67,10 +67,15 @@ UserSchema.pre('save', function(next) {
 });
 
 UserSchema.post('save', function(doc, next) {
-  if (this[isNewSymbol]) {
-    sendConfirmEmail(doc);
+  try {
+    if (this[isNewSymbol]) {
+      sendConfirmEmail(doc);
+    }
+  } catch (error) {
+    console.error(error);
+  } finally {
+    next();
   }
-  next();
 });
 
 const UserModel = model('UserModel', UserSchema);
